@@ -37,7 +37,6 @@ def inicializarPoblacion():
 
 
 
-
 """
 *   Función que verifica si el algoritmo ya llegó a su fin
 """
@@ -134,7 +133,7 @@ def cruzar(padre1, padre2):
 *   Se va a cambiar el bit con valor 0 más a la izquierda por 1
 """
 def mutar(solucion):
-    for i in xrange(0,len(solucion)):
+    for i in range(0,len(solucion)):
         if solucion[i] == 0:
             solucion[i] = 1 #Cambio el valor por 1
             break #Me salgo del ciclo
