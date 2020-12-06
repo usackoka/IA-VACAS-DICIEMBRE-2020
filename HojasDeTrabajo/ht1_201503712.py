@@ -11,7 +11,7 @@ class Nodo:
 
 
 # CONSTANTES DEL ALGORITMO
-maximo_generaciones = 2  # Número máximo de generaciones que va a tener el algoritmo
+maximo_generaciones = 1000  # Número máximo de generaciones que va a tener el algoritmo
 poblacionInicial = 10  # Número de individuos a evaluar
 solucion = [1, 5, 7, 8, 6, 9, 3, 4]  # Solución que esperamos encontrar
 
@@ -114,10 +114,10 @@ def cruzar(padre1, padre2):
 
 
 def mutar(solucion):
-    for i in range(0, len(solucion)):
-        if randrange(1) == 1:
+    for i in range(len(solucion)):
+        if randrange(2) == 1:
             # Cambio el valor por uno random de 0 - 9
-            solucion[i] = randrange(9)
+            solucion[i] = randrange(10)
     return solucion  # Retorno la misma solución, solo que ahora mutó
 
 
@@ -164,7 +164,7 @@ def emparejar(padres):
         :len(hijos)]  # Los ordena de menor a mayor
 
     # La nueva población se hará de la siguiente manera:
-    return [padres[0], hijos[1], padres[1], hijos[0], padres[2], hijos[2], padres[3], hijos[3], padres[4], hijos[4]]
+    return np.concatenate((padres, hijos))
 
 
 """
