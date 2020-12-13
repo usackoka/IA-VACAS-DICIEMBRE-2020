@@ -24,8 +24,8 @@ class NodoExcel:
 data = [NodoExcel(75, 50, 90, 65, 71.75), NodoExcel(80, 95, 88, 80, 84.65), NodoExcel(
     20, 55, 60, 58, 52.45), NodoExcel(60, 28, 69, 50, 53.9)]  # Data cargada del excel
 total_genes = 4  # Número de genes por individuo
-maximo_generaciones = 10  # Número máximo de generaciones que va a tener el algoritmo
-poblacionInicial = 10  # Número de individuos a evaluar
+maximo_generaciones = 100  # Número máximo de generaciones que va a tener el algoritmo
+poblacionInicial = 30  # Número de individuos a evaluar
 
 # VARIABLES DE EVALUACION DEL FITNESS
 fitness_mai = 10  # Número a cumplir mayor o igual para fitness
@@ -205,12 +205,15 @@ def emparejar(padres):
     global poblacionInicial  # Total de la población
 
     total_hijos_a_crear = poblacionInicial - len(padres)
+    pilaPadres = padres[:]
 
     # Creo un arreglo de hijos para luego ordenarlos
     hijos = []
     for i in range(total_hijos_a_crear):
         hijo = Nodo()
-        hijo.solucion = cruzar(padres[0].solucion, padres[1].solucion)
+        pilaPadres = padres[:] if len(pilaPadres) <= 1 else pilaPadres
+        hijo.solucion = cruzar(pilaPadres.pop().solucion,
+                               pilaPadres.pop().solucion)
         hijo.solucion = mutar(hijo.solucion) if randrange(
             2) == 0 else hijo.solucion
         hijo.fitness = evaluarFitness(hijo.solucion)
