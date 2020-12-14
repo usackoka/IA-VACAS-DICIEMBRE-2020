@@ -1,5 +1,6 @@
 import React from "react";
 import {} from "bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 
 const dataFinalizacion = [
   { id: "generacion", label: "Máximo número de generaciones - 10000" },
@@ -29,8 +30,36 @@ const dataSeleccionPadres = [
   },
 ];
 
+const Select = (props) => {
+  const { data, label } = props;
+
+  return (
+    <>
+      <Form.Group controlId="exampleForm.ControlSelect1">
+        <Form.Label>{label}</Form.Label>
+        <Form.Control as="select">
+          {data.map((x) => (
+            <option value={x?.id}>{x?.label}</option>
+          ))}
+        </Form.Control>
+      </Form.Group>
+    </>
+  );
+};
+
 const FormModelo = () => {
-  return <></>;
+  return (
+    <>
+      <Select
+        data={dataFinalizacion}
+        label="Seleccionar criterio de finalización"
+      />
+      <Select
+        data={dataSeleccionPadres}
+        label="Seleccionar criterio de selección de padres"
+      />
+    </>
+  );
 };
 
 export default FormModelo;

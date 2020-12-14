@@ -1,6 +1,7 @@
 import React from "react";
-import { Card, Col, Container, Navbar, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Navbar, Row } from "react-bootstrap";
 import FormFileLabel from "react-bootstrap/esm/FormFileLabel";
+import FormCalcularNota from "../FormCalcularNota";
 import FormModelo from "../FormModelo";
 
 const Home = () => {
@@ -15,19 +16,37 @@ const Home = () => {
       <Card>
         <Row>
           <Col lg="6">
-            <div className="space">
-              <input
-                title="Seleccionar archivo"
-                type="file"
-                id="single"
-                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              />
-            </div>
+            <Row>
+              <Col lg="8">
+                <div className="space">
+                  <input
+                    title="Seleccionar archivo"
+                    type="file"
+                    id="single"
+                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="8">
+                <div className="marginCard">
+                  <FormModelo />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="8">
+                <Button type="submit" className="btn btn-success">
+                  Generar Modelo
+                </Button>
+              </Col>
+            </Row>
           </Col>
-        </Row>
-        <Row>
-          <Col>
-            <FormModelo />
+          <Col lg="6">
+            <div className="space">
+              <FormCalcularNota />
+            </div>
           </Col>
         </Row>
       </Card>
