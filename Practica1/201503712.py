@@ -27,7 +27,8 @@ total_genes = 4  # Número de genes por individuo
 poblacionInicial = 30  # Número de individuos a evaluar
 
 # VARIABLES DE EVALUACION DEL FITNESS
-maximo_generaciones = 1000  # Número máximo de generaciones que va a tener el algoritmo
+# Número máximo de generaciones que va a tener el algoritmo
+maximo_generaciones = 10000
 fitness_mei = 10  # Número a cumplir menor o igual para fitness
 promedioFitness = 15  # Número a comparar para el promedio de fitness en una solución
 
