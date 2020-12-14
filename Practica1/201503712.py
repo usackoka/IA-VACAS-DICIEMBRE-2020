@@ -24,13 +24,12 @@ class NodoExcel:
 data = [NodoExcel(75, 50, 90, 65, 71.75), NodoExcel(80, 95, 88, 80, 84.65), NodoExcel(
     20, 55, 60, 58, 52.45), NodoExcel(60, 28, 69, 50, 53.9)]  # Data cargada del excel
 total_genes = 4  # Número de genes por individuo
-maximo_generaciones = 100  # Número máximo de generaciones que va a tener el algoritmo
 poblacionInicial = 30  # Número de individuos a evaluar
 
 # VARIABLES DE EVALUACION DEL FITNESS
-fitness_mai = 10  # Número a cumplir mayor o igual para fitness
+maximo_generaciones = 1000  # Número máximo de generaciones que va a tener el algoritmo
 fitness_mei = 10  # Número a cumplir menor o igual para fitness
-promedioFitness = 0  # Número a comparar para el promedio de fitness en una solución
+promedioFitness = 15  # Número a comparar para el promedio de fitness en una solución
 
 
 def getRandoms():
@@ -64,7 +63,6 @@ def inicializarPoblacion():
 
 
 def verificarCriterio(poblacion, generacion, seleccion):
-    global fitness_mai
     global fitness_mei
     global promedioFitness
 
@@ -72,14 +70,7 @@ def verificarCriterio(poblacion, generacion, seleccion):
         # Si ya llegó al máximo de generaciones lo detengo
         if generacion >= maximo_generaciones:
             return True
-    elif seleccion == 'fitness_mai':
-        # Calculo el valor fitness de los individuos
-        for individuo in poblacion:
-            individuo.fitness = evaluarFitness(individuo.solucion)
-            # Si el fitness es mayor o igual a fitness_mai
-            if individuo.fitness >= fitness_mai:
-                return True
-    elif seleccion == 'fitness_mei':
+    elif seleccion == 'fitness':
         # Calculo el valor fitness de los individuos
         for individuo in poblacion:
             individuo.fitness = evaluarFitness(individuo.solucion)
