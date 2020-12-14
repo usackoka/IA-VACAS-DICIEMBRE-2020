@@ -3,6 +3,9 @@
 import numpy as np
 import math
 from random import randrange, uniform
+from flask import Flask, jsonify
+
+app = Flask(__name__)
 
 
 class Nodo:
@@ -271,5 +274,15 @@ def ejecutar():
     imprimirIndividuo(mejorIndividuo)
 
 
+@app.route('/')
+def hello_world():
+    return jsonify(
+        response='Hellow world!',
+    )
+
+
+if __name__ == '__main__':
+    app.run()
+
 # Corro el algoritmo
-ejecutar()
+# ejecutar()
