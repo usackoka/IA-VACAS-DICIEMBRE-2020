@@ -3,7 +3,8 @@
 import numpy as np
 import math
 from random import randrange, uniform
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
 
@@ -281,7 +282,20 @@ def hello_world():
     )
 
 
+@app.route('/data-excel', methods=['GET', 'POST'])
+def set_data():
+
+    if request.method == 'POST':
+        print(request.json)
+        print('seteando la data')
+
+    return jsonify(
+        data='default response',
+    )
+
+
 if __name__ == '__main__':
+    CORS(app)
     app.run()
 
 # Corro el algoritmo

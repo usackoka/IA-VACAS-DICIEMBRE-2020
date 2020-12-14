@@ -1,10 +1,63 @@
 import React from "react";
 import { Button, Card, Col, Container, Navbar, Row } from "react-bootstrap";
-import FormFileLabel from "react-bootstrap/esm/FormFileLabel";
 import FormCalcularNota from "../FormCalcularNota";
 import FormModelo from "../FormModelo";
 
 const Home = () => {
+  const parsearArchivo = (event) => {
+    const f = event.target.files[0];
+    if (f) {
+      var r = new FileReader();
+      r.onload = function (e) {
+        var ct = r.result;
+        const rows = ct.split("\n");
+        crearJSONObject(rows);
+      };
+      r.readAsText(f);
+    } else {
+      alert("Failed to load file");
+    }
+  };
+
+  const crearJSONObject = (rows) => {
+    let jsonObject = [];
+
+    rows.forEach((row, index) => {
+      const columns = row.split(",");
+      if (index > 0) {
+        jsonObject.push({
+          proyecto1: columns[0],
+          proyecto2: columns[1],
+          proyecto3: columns[2],
+          proyecto4: columns[3],
+          notaReal: columns[4],
+        });
+      }
+    });
+
+    postData("http://127.0.0.1:5000/data-excel", jsonObject)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  const postData = async (url = "", data = {}) => {
+    // Opciones por defecto estan marcadas con un *
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify(data);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    return fetch(url, requestOptions);
+  };
+
   return (
     <Container>
       <br />
@@ -20,6 +73,7 @@ const Home = () => {
               <Col lg="8">
                 <div className="space">
                   <input
+                    onChange={parsearArchivo}
                     title="Seleccionar archivo"
                     type="file"
                     id="single"
