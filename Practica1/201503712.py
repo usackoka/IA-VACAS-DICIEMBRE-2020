@@ -4,6 +4,7 @@ import numpy as np
 import math
 import json
 from random import randrange, uniform
+from datetime import date
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -33,13 +34,14 @@ poblacionInicial = 30  # Número de individuos a evaluar
 # VARIABLES DE EVALUACION DEL FITNESS
 # Número máximo de generaciones que va a tener el algoritmo
 maximo_generaciones = 30000
-fitness_mei = 1  # Número a cumplir menor o igual para fitness
-promedioFitness = 1  # Número a comparar para el promedio de fitness en una solución
+fitness_mei = 0.30  # Número a cumplir menor o igual para fitness
+promedioFitness = 0.30  # Número a comparar para el promedio de fitness en una solución
 
 # VARIABLES DEL MODELO
 criterioFinalizacion = 'generacion'
 criterioPadres = 'fitness'
 mejorIndividuo = Nodo()
+nombreDoc = 'excel.csv'
 
 
 def getRandoms():
@@ -75,6 +77,7 @@ def inicializarPoblacion():
 def verificarCriterio(poblacion, generacion, seleccion):
     global fitness_mei
     global promedioFitness
+    global maximo_generaciones
 
     if seleccion == 'generacion':
         # Si ya llegó al máximo de generaciones lo detengo
@@ -271,6 +274,7 @@ def ejecutar():
     global criterioFinalizacion
     global criterioPadres
     global mejorIndividuo
+    global nombreDoc
 
     generacion = 0
     poblacion = inicializarPoblacion()
@@ -297,6 +301,23 @@ def ejecutar():
 
     print('\n\n*************** MEJOR INDIVIDUO***************')
     imprimirIndividuo(mejorIndividuo)
+
+    f = open('bitacora.txt', 'wb')
+    f.write('============== BITACORA ==============\n')
+    today = date.today()
+    f.write('FECHA Y HORA: ', today)
+    f.write('Nombre documento: ', nombreDoc)
+    f.write('Criterio de finalización: ', criterioFinalizacion)
+    f.write('Criterio de selección de padres: ', criterioPadres)
+    f.write('Número de generaciones: ', generacion)
+    f.write('Mejor solución: ', mejorIndividuo.solucion)
+
+    f.close()
+
+    return jsonify(
+        generaciones=generacion,
+        mejorSolucion=mejorIndividuo.solucion
+    )
 
 
 @app.route('/')
@@ -329,7 +350,7 @@ def generar_modelo():
         criterioPadres = dataExcel['padres']
         print('=========== CRITERIOS SETEADOS CON ÉXITO ===========')
         print('=========== EJECUTANDO MODELO ======================')
-        ejecutar()
+        return ejecutar()
 
     return jsonify(
         data='default response',
@@ -343,8 +364,9 @@ def set_data():
         print('=========== SETEANDO LA DATA DEL EXCEL ===========')
         data = []
         dataExcel = request.json
-        for i in range(len(dataExcel)):
-            row = dataExcel[i]
+        nombreDoc = dataExcel['nombreDoc']
+        for i in range(len(dataExcel['data'])):
+            row = dataExcel['data'][i]
             try:
                 data.append(NodoExcel(row['proyecto1'], row['proyecto2'],
                                       row['proyecto3'], row['proyecto4'],

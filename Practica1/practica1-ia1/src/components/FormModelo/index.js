@@ -3,14 +3,14 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import postData from "../../services/httpFetch";
 
 const dataFinalizacion = [
-  { id: "generacion", label: "Máximo número de generaciones - 30000" },
+  { id: "generacion", label: "Máximo número de generaciones - 30k" },
   {
     id: "promedio",
-    label: "Valor fitness promedio dentro de la población - 1",
+    label: "Valor fitness promedio dentro de la población - 0.30",
   },
   {
     id: "fitness",
-    label: "Fitness mínimo alcanzado por una solución - 1",
+    label: "Fitness mínimo alcanzado por una solución - 0.30",
   },
 ];
 

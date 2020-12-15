@@ -10,6 +10,7 @@ const postData = async (endpoint = "", data = {}) => {
     headers: myHeaders,
     body: raw,
     redirect: "follow",
+    timeout: 180000, // 3 minutos
   };
 
   return fetch(`http://127.0.0.1:5000${endpoint}`, requestOptions);

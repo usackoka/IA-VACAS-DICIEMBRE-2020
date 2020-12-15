@@ -12,7 +12,7 @@ const Home = () => {
       r.onload = function (e) {
         var ct = r.result;
         const rows = ct.split("\n");
-        crearJSONObject(rows);
+        crearJSONObject(rows, f);
       };
       r.readAsText(f);
     } else {
@@ -20,13 +20,14 @@ const Home = () => {
     }
   };
 
-  const crearJSONObject = (rows) => {
-    let jsonObject = [];
+  const crearJSONObject = (rows, file) => {
+    console.log(file);
+    let jsonObject = { data: [], nombreDoc: file.name };
 
     rows.forEach((row, index) => {
       const columns = row.split(",");
       if (index > 0) {
-        jsonObject.push({
+        jsonObject.data.push({
           proyecto1: columns[0],
           proyecto2: columns[1],
           proyecto3: columns[2],
@@ -36,7 +37,6 @@ const Home = () => {
       }
     });
 
-    console.log(jsonObject);
     postData("/data-excel", jsonObject)
       .then((response) => response.text())
       .then((result) => console.log(result))
