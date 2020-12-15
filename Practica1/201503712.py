@@ -18,11 +18,11 @@ class Nodo:
 
 class NodoExcel:
     def __init__(self, proyecto1=0, proyecto2=0, proyecto3=0, proyecto4=0, notaReal=0):
-        self.proyecto1 = proyecto1
-        self.proyecto2 = proyecto2
-        self.proyecto3 = proyecto3
-        self.proyecto4 = proyecto4
-        self.notaReal = notaReal
+        self.proyecto1 = float(proyecto1)
+        self.proyecto2 = float(proyecto2)
+        self.proyecto3 = float(proyecto3)
+        self.proyecto4 = float(proyecto4)
+        self.notaReal = float(notaReal)
 
 
 # CONSTANTES DEL ALGORITMO
@@ -39,6 +39,7 @@ promedioFitness = 1  # Número a comparar para el promedio de fitness en una sol
 # VARIABLES DEL MODELO
 criterioFinalizacion = 'generacion'
 criterioPadres = 'fitness'
+mejorIndividuo = Nodo()
 
 
 def getRandoms():
@@ -245,6 +246,21 @@ def imprimirPoblacion(poblacion):
         imprimirIndividuo(individuo)
 
 
+def calcularNota(proyecto1, proyecto2, proyecto3, proyecto4):
+    proyecto1 = float(proyecto1)
+    proyecto2 = float(proyecto2)
+    proyecto3 = float(proyecto3)
+    proyecto4 = float(proyecto4)
+
+    global mejorIndividuo
+    print('=============== CALCULANDO NOTA ===============')
+    notaCalculada = mejorIndividuo.solucion[0] * proyecto1 + \
+        mejorIndividuo.solucion[1] * proyecto2 + \
+        mejorIndividuo.solucion[2] * proyecto3 + \
+        mejorIndividuo.solucion[3] * proyecto4
+    print('NOTA CALCULADA: ', notaCalculada)
+
+
 """
 *   Método que ejecutará el algoritmo genético para obtener
 *   los coeficientes del filtro
@@ -254,6 +270,8 @@ def imprimirPoblacion(poblacion):
 def ejecutar():
     global criterioFinalizacion
     global criterioPadres
+    global mejorIndividuo
+
     generacion = 0
     poblacion = inicializarPoblacion()
     fin = verificarCriterio(poblacion, generacion, criterioFinalizacion)
@@ -285,6 +303,18 @@ def ejecutar():
 def hello_world():
     return jsonify(
         response='Hellow world!',
+    )
+
+
+@app.route('/calcular-nota', methods=['POST'])
+def calcular_nota():
+    if request.method == 'POST':
+        dataExcel = request.json
+        calcularNota(dataExcel['proyecto1'], dataExcel['proyecto2'],
+                     dataExcel['proyecto3'], dataExcel['proyecto4'])
+
+    return jsonify(
+        data='default response',
     )
 
 

@@ -58,11 +58,7 @@ const FormModelo = () => {
   };
 
   const generarModelo = () => {
-    const jsonObject = {};
-
-    console.log(formData);
-
-    postData("/generar-modelo", jsonObject)
+    postData("/generar-modelo", formData)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
