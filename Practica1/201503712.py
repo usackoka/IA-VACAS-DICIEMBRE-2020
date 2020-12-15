@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import math
+import json
 from random import randrange, uniform
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -25,16 +26,19 @@ class NodoExcel:
 
 
 # CONSTANTES DEL ALGORITMO
-data = [NodoExcel(75, 50, 90, 65, 71.75), NodoExcel(80, 95, 88, 80, 84.65), NodoExcel(
-    20, 55, 60, 58, 52.45), NodoExcel(60, 28, 69, 50, 53.9)]  # Data cargada del excel
+data = []  # Data cargada del excel
 total_genes = 4  # Número de genes por individuo
 poblacionInicial = 30  # Número de individuos a evaluar
 
 # VARIABLES DE EVALUACION DEL FITNESS
 # Número máximo de generaciones que va a tener el algoritmo
-maximo_generaciones = 10000
-fitness_mei = 10  # Número a cumplir menor o igual para fitness
-promedioFitness = 15  # Número a comparar para el promedio de fitness en una solución
+maximo_generaciones = 30000
+fitness_mei = 1  # Número a cumplir menor o igual para fitness
+promedioFitness = 1  # Número a comparar para el promedio de fitness en una solución
+
+# VARIABLES DEL MODELO
+criterioFinalizacion = 'generacion'
+criterioPadres = 'fitness'
 
 
 def getRandoms():
@@ -248,19 +252,21 @@ def imprimirPoblacion(poblacion):
 
 
 def ejecutar():
+    global criterioFinalizacion
+    global criterioPadres
     generacion = 0
     poblacion = inicializarPoblacion()
-    fin = verificarCriterio(poblacion, generacion, 'generacion')
+    fin = verificarCriterio(poblacion, generacion, criterioFinalizacion)
 
     # Imprimo la población
     print('*************** GENERACION ', generacion, " ***************")
     imprimirPoblacion(poblacion)
 
     while(fin == None):
-        padres = seleccionarPadres(poblacion, 'fitness')
+        padres = seleccionarPadres(poblacion, criterioPadres)
         poblacion = emparejar(padres)
         generacion += 1
-        fin = verificarCriterio(poblacion, generacion, 'generacion')
+        fin = verificarCriterio(poblacion, generacion, criterioFinalizacion)
 
         # Imprimo la población
         print('*************** GENERACION ', generacion, " ***************")
@@ -282,12 +288,42 @@ def hello_world():
     )
 
 
+@app.route('/generar-modelo', methods=['POST'])
+def generar_modelo():
+    if request.method == 'POST':
+        global criterioFinalizacion
+        global criterioPadres
+        print('=========== SETEANDO CRITERIOS ===========')
+        dataExcel = request.json
+        criterioFinalizacion = dataExcel['finalizacion']
+        criterioPadres = dataExcel['padres']
+        print('=========== CRITERIOS SETEADOS CON ÉXITO ===========')
+        print('=========== EJECUTANDO MODELO ======================')
+        ejecutar()
+
+    return jsonify(
+        data='default response',
+    )
+
+
 @app.route('/data-excel', methods=['GET', 'POST'])
 def set_data():
-
     if request.method == 'POST':
-        print(request.json)
-        print('seteando la data')
+        global data
+        print('=========== SETEANDO LA DATA DEL EXCEL ===========')
+        data = []
+        dataExcel = request.json
+        for i in range(len(dataExcel)):
+            row = dataExcel[i]
+            try:
+                data.append(NodoExcel(row['proyecto1'], row['proyecto2'],
+                                      row['proyecto3'], row['proyecto4'],
+                                      row['notaReal']))
+            except Exception as e:
+                print(row, 'iteración: ', i)
+                raise
+
+        print('=========== DATA SETEADA CON ÉXITO ===========')
 
     return jsonify(
         data='default response',

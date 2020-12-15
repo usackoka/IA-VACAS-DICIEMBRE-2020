@@ -1,16 +1,16 @@
-import React from "react";
-import {} from "bootstrap";
-import { Col, Form, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import postData from "../../services/httpFetch";
 
 const dataFinalizacion = [
-  { id: "generacion", label: "Máximo número de generaciones - 10000" },
+  { id: "generacion", label: "Máximo número de generaciones - 30000" },
   {
     id: "promedio",
-    label: "Valor fitness promedio dentro de la población - 15",
+    label: "Valor fitness promedio dentro de la población - 1",
   },
   {
     id: "fitness",
-    label: "Fitness máximo alcanzado por una solución - 10",
+    label: "Fitness mínimo alcanzado por una solución - 1",
   },
 ];
 
@@ -31,13 +31,13 @@ const dataSeleccionPadres = [
 ];
 
 const Select = (props) => {
-  const { data, label } = props;
+  const { data, label, onChange, name } = props;
 
   return (
     <>
       <Form.Group controlId="exampleForm.ControlSelect1">
         <Form.Label>{label}</Form.Label>
-        <Form.Control as="select">
+        <Form.Control as="select" onChange={onChange} name={name}>
           {data.map((x) => (
             <option value={x?.id}>{x?.label}</option>
           ))}
@@ -48,16 +48,43 @@ const Select = (props) => {
 };
 
 const FormModelo = () => {
+  const [formData, setFormData] = useState({
+    finalizacion: "fitness",
+    padres: "fitness",
+  });
+
+  const onChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const generarModelo = () => {
+    const jsonObject = {};
+
+    console.log(formData);
+
+    postData("/generar-modelo", jsonObject)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <>
       <Select
         data={dataFinalizacion}
         label="Seleccionar criterio de finalización"
+        name="finalizacion"
+        onChange={onChange}
       />
       <Select
         data={dataSeleccionPadres}
         label="Seleccionar criterio de selección de padres"
+        name="padres"
+        onChange={onChange}
       />
+      <Button type="submit" className="btn btn-success" onClick={generarModelo}>
+        Generar Modelo
+      </Button>
     </>
   );
 };

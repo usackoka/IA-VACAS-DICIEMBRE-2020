@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Card, Col, Container, Navbar, Row } from "react-bootstrap";
 import FormCalcularNota from "../FormCalcularNota";
 import FormModelo from "../FormModelo";
+import postData from "./../../services/httpFetch";
 
 const Home = () => {
   const parsearArchivo = (event) => {
@@ -35,27 +36,11 @@ const Home = () => {
       }
     });
 
-    postData("http://127.0.0.1:5000/data-excel", jsonObject)
+    console.log(jsonObject);
+    postData("/data-excel", jsonObject)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
-  };
-
-  const postData = async (url = "", data = {}) => {
-    // Opciones por defecto estan marcadas con un *
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify(data);
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    return fetch(url, requestOptions);
   };
 
   return (
@@ -87,13 +72,6 @@ const Home = () => {
                 <div className="marginCard">
                   <FormModelo />
                 </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="8">
-                <Button type="submit" className="btn btn-success">
-                  Generar Modelo
-                </Button>
               </Col>
             </Row>
           </Col>
