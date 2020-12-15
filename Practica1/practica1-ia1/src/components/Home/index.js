@@ -21,7 +21,6 @@ const Home = () => {
   };
 
   const crearJSONObject = (rows, file) => {
-    console.log(file);
     let jsonObject = { data: [], nombreDoc: file.name };
 
     rows.forEach((row, index) => {

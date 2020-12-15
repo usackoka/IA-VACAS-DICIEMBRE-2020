@@ -49,8 +49,8 @@ const Select = (props) => {
 
 const FormModelo = () => {
   const [formData, setFormData] = useState({
-    finalizacion: "fitness",
-    padres: "fitness",
+    finalizacion: "generacion",
+    padres: "aleatoria",
   });
 
   const onChange = (event) => {

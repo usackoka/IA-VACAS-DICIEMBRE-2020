@@ -4,7 +4,7 @@ import numpy as np
 import math
 import json
 from random import randrange, uniform
-from datetime import date
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -302,15 +302,16 @@ def ejecutar():
     print('\n\n*************** MEJOR INDIVIDUO***************')
     imprimirIndividuo(mejorIndividuo)
 
-    f = open('bitacora.txt', 'wb')
-    f.write('============== BITACORA ==============\n')
-    today = date.today()
-    f.write('FECHA Y HORA: ', today)
-    f.write('Nombre documento: ', nombreDoc)
-    f.write('Criterio de finalización: ', criterioFinalizacion)
-    f.write('Criterio de selección de padres: ', criterioPadres)
-    f.write('Número de generaciones: ', generacion)
-    f.write('Mejor solución: ', mejorIndividuo.solucion)
+    f = open('bitacora.txt', 'a')
+    f.write("\n\n\n============== BITACORA ==============")
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    f.write("\nFECHA Y HORA: "+str(dt_string))
+    f.write("\nNOMBRE DEL DOCUMENTO: "+nombreDoc)
+    f.write("\nCRITERIO DE FINALIZACION: "+criterioFinalizacion)
+    f.write("\nCRITERIO DE SELECCION DE PADRES: "+criterioPadres)
+    f.write("\nNUMERO DE GENERACIONES: "+str(generacion))
+    f.write("\nMEJOR SOLUCION: "+str(mejorIndividuo.solucion))
 
     f.close()
 
