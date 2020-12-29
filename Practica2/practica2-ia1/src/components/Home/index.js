@@ -5,16 +5,17 @@ import postData from "./../../services/httpFetch";
 
 const Home = () => {
   const parsearArchivo = (event) => {
-    return;
-    const f = event.target.files[0];
-    if (f) {
-      var r = new FileReader();
-      r.onload = function (e) {
-        var ct = r.result;
-        const rows = ct.split("\n");
-        crearJSONObject(rows, f);
-      };
-      r.readAsText(f);
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      console.log(files);
+      [...files].forEach((file) => {
+        var r = new FileReader();
+        r.onload = function (e) {
+          var ct = r.result;
+          console.log(ct);
+        };
+        r.readAsArrayBuffer(file);
+      });
     } else {
       alert("Failed to load file");
     }
@@ -62,7 +63,7 @@ const Home = () => {
                       alt={"name"}
                       height={128}
                       width={128}
-                      src="./../../../public/logo512.png" // use normal <img> attributes as props
+                      src="public/logo512.png" // use normal <img> attributes as props
                     />
                     <span>{"name"}</span>
                   </div>
