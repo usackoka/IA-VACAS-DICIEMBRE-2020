@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import csv
+import os
+from PIL import Image
 import numpy as np
 import h5py
 
 source = None
+
 
 def read_file(path):
     data = []
@@ -32,53 +32,26 @@ def read_file(path):
 
 
 def load_dataset():
-    train_dataset = h5py.File('datasets/train_catvnoncat.h5', "r")
+    contenido = os.listdir('./Datasets/USAC')
+    lista = []
+    for imagen in contenido:
+        image = Image.open('./Datasets/USAC/'+imagen)
+        data = np.array(image)
+        lista.append(data)
+    train_dataset = np.array(lista)
 
-    #train_set_x_orig = arreglo de imágenes
-    #train_set_y_orig = arreglo de imágenes
-
-    train_set_x_orig = np.array(train_dataset["train_set_x"][:])  # entradas de entrenamiento
-    train_set_y_orig = np.array(train_dataset["train_set_y"][:])  # salidas de entrenamiento
-
-    #print('************** train_set_x_orig **************')
-    #print(train_set_x_orig)
-    #print(type(train_set_x_orig))
-    #print('************** train_set_y_orig **************')
-    #print(train_set_y_orig)
-    #print(len(train_set_y_orig))
-
-
-
+    # entradas de entrenamiento
+    train_set_x_orig = np.array(train_dataset["train_set_x"][:])
+    # salidas de entrenamiento
+    train_set_y_orig = np.array(train_dataset["train_set_y"][:])
     test_dataset = h5py.File('datasets/test_catvnoncat.h5', "r")
-    test_set_x_orig = np.array(test_dataset["test_set_x"][:])  # entradas de prueba
-    test_set_y_orig = np.array(test_dataset["test_set_y"][:])  # salidas de prueba
+    test_set_x_orig = np.array(
+        test_dataset["test_set_x"][:])  # entradas de prueba
+    test_set_y_orig = np.array(
+        test_dataset["test_set_y"][:])  # salidas de prueba
 
-    #print('************** test_set_x_orig **************')
-    #print(test_set_x_orig)
-    #print(len(test_set_x_orig))
-    #print('************** test_set_y_orig **************')
-    #print(test_set_y_orig) #Arreglo con las respuestas correctas, donde 0 = NO es un gato, 1 = SÍ es un gato
-    #print(len(test_set_y_orig))
-
-
-
-    #Les aplica reshape, convierte al arreglo en un arreglo de areglos
+    # Les aplica reshape, convierte al arreglo en un arreglo de areglos
     train_set_y_orig = train_set_y_orig.reshape((1, train_set_y_orig.shape[0]))
     test_set_y_orig = test_set_y_orig.reshape((1, test_set_y_orig.shape[0]))
-
-    #print('************** train_set_y_orig con reshape**************')
-    #print(train_set_y_orig)
-    #print(len(train_set_y_orig))
-    #print('************** test_set_y_orig con reshape**************')
-    #print(test_set_y_orig)
-    #print(len(test_set_y_orig))
-
-    #print(type(train_set_x_orig))
-    #print(type(train_set_y_orig))
-    #print(type(test_set_x_orig))
-    #print(type(test_set_y_orig))
-
-    #print(len(train_set_x_orig))
-    #print(train_set_x_orig.shape)
 
     return train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, ['No Gato', 'Gato']
