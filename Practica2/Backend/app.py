@@ -205,8 +205,8 @@ def upload_file():
         return addImagenesAComp(direcciones)
     return '''
     <!doctype html>
-    <title>Subir archivo</title>
-    <h1>Subir archivo</h1>
+    <title>201503712</title>
+    <h1>Practica 2 - Oscar Cuéllar - 201503712</h1>
     <form method="post" enctype="multipart/form-data">
       <input type="file" name="file[]" multiple>
       <input type="submit" value="Upload">
