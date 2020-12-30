@@ -10,7 +10,7 @@ from Logistic_Regression.Data import Data
 #MIN_VALUE = 0.1
 #STEP = 100
 
-MAX_ITERATIONS = 10000
+MAX_ITERATIONS = 1000
 MIN_VALUE = 0.0
 STEP = 10 #Cada cuánto va a agregar a la bitácora el costo. Lo hace cuando es múltiplo del valor que se le da
 
@@ -48,7 +48,7 @@ class Model:
         self.train_accuracy = 100 - np.mean(np.abs(train_prediction - self.train_set.y)) * 100
         self.test_accuracy = 100 - np.mean(np.abs(test_prediction - self.test_set.y)) * 100
         print('Eficacia en entrenamiento: ', self.train_accuracy)
-        print('Eficacia en prueba: ', self.test_accuracy, end='\r\n------------\r\n')
+        print('Eficacia en prueba: ', self.test_accuracy)
 
     def update_coefficients(self, gradient):
         self.betas -= self.alpha * gradient
@@ -94,3 +94,6 @@ class Model:
         result = y_hat >= 0.5
         return result.astype(int)
 
+    def predict2(self, x): 
+        y_hat = self.sigmoide(np.dot(self.betas.T, x))
+        return round( y_hat[0] , 8) * 100
