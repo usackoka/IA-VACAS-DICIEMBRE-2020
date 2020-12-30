@@ -12,8 +12,7 @@ from Logistic_Regression.Data import Data
 
 MAX_ITERATIONS = 1000
 MIN_VALUE = 0.0
-STEP = 10 #Cada cuánto va a agregar a la bitácora el costo. Lo hace cuando es múltiplo del valor que se le da
-
+STEP = 10  # Cada cuánto va a agregar a la bitácora el costo. Lo hace cuando es múltiplo del valor que se le da
 
 
 class Model:
@@ -27,26 +26,30 @@ class Model:
         self.test_set = test_set
         # Se inicializan los coeficientes del modelo
         self.betas = np.zeros((self.train_set.n, 1))
-        #print(self.betas)
+        # print(self.betas)
         self.bitacora = []
 
     def training(self, print_training=False, step=100):
         iterations = 0
         cost, dB = self.cost_function(self.train_set)
-        if print_training: print(iterations, cost, sep="---")
+        if print_training:
+            print(iterations, cost, sep="---")
         end = self.finalization(cost, iterations)
         while not end:
             self.update_coefficients(dB)
             iterations += 1
             cost, dB = self.cost_function(self.train_set)
-            if print_training: print(iterations, cost, sep="---")
+            if print_training:
+                print(iterations, cost, sep="---")
             end = self.finalization(cost, iterations)
 
         train_prediction = self.predict(self.train_set.x)
         test_prediction = self.predict(self.test_set.x)
 
-        self.train_accuracy = 100 - np.mean(np.abs(train_prediction - self.train_set.y)) * 100
-        self.test_accuracy = 100 - np.mean(np.abs(test_prediction - self.test_set.y)) * 100
+        self.train_accuracy = 100 - \
+            np.mean(np.abs(train_prediction - self.train_set.y)) * 100
+        self.test_accuracy = 100 - \
+            np.mean(np.abs(test_prediction - self.test_set.y)) * 100
         print('Eficacia en entrenamiento: ', self.train_accuracy)
         print('Eficacia en prueba: ', self.test_accuracy)
 
@@ -54,8 +57,9 @@ class Model:
         self.betas -= self.alpha * gradient
 
     def finalization(self, cost, iterations):
-        if iterations % STEP == 0: self.bitacora.append(cost)
-        
+        if iterations % STEP == 0:
+            self.bitacora.append(cost)
+
         if cost < MIN_VALUE:
             return True
         elif iterations > MAX_ITERATIONS:
@@ -65,17 +69,20 @@ class Model:
 
     def cost_function(self, data_set):
         y_hat = self.sigmoide(np.dot(self.betas.T, data_set.x))
-        cost = -1 / data_set.m * np.sum(data_set.y * np.log(y_hat) + (1 - data_set.y) * np.log(1 - y_hat))
-        dB = 1/ data_set.m * np.sum(np.dot(y_hat - data_set.y, data_set.x.T), axis=0)
+        cost = -1 / data_set.m * \
+            np.sum(data_set.y * np.log(y_hat) +
+                   (1 - data_set.y) * np.log(1 - y_hat))
+        dB = 1 / data_set.m * \
+            np.sum(np.dot(y_hat - data_set.y, data_set.x.T), axis=0)
         dB = dB.reshape((len(dB), 1))
-        
+
         if self.reg:
             cost += self.lam / (2 * data_set.m) * sum(self.betas ** 2)
             dB += (self.lam / data_set.m) * self.betas
 
         #print('cost: ', cost)
         #print('dB: ', dB)
-        
+
         return cost, dB
 
     def sigmoide(self, z):
@@ -94,6 +101,6 @@ class Model:
         result = y_hat >= 0.5
         return result.astype(int)
 
-    def predict2(self, x): 
+    def predict2(self, x):
         y_hat = self.sigmoide(np.dot(self.betas.T, x))
-        return round( y_hat[0] , 8) * 100
+        return round(y_hat[0], 8) * 100
